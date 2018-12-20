@@ -12,7 +12,6 @@ class Generator:
         self._proxy = list()
         self._chain_mode = chain_mode
         self._quite_mode = quiet_mode
-        self._path_to_conf = '/etc/proxychains.conf'
 
         if isinstance(proxy, str):
             self._proxy.append(proxy)
@@ -22,24 +21,27 @@ class Generator:
     def write(self,
               path_to_conf: str = '/etc/proxychains.conf'):
 
-        xp.about_to('Generate config file for proxychains')
+        xp.about_t('Generate', path_to_conf, 'for proxychains')
 
-        pc4_config_content = '{chain_mode}\n'.format(chain_mode=self._chain_mode)
+        configs = list()
 
+        configs.append('{chain_mode}'.format(chain_mode=self._chain_mode))
         if self._quite_mode:
-            pc4_config_content += 'quiet_mode\n'
+            configs.append('quiet_mode')
+        configs.append('proxy_dns')
+        configs.append('remote_dns_subnet 224')
+        configs.append('tcp_read_time_out 15000')
+        configs.append('tcp_connect_time_out 8000')
+        configs.append('')
+        configs.append('[ProxyList]')
+        configs.append('{proxy}'.format(proxy='\n'.join(self._proxy)))
+        configs = '\n'.join(configs)
 
-        pc4_config_content += 'proxy_dns\n' \
-                              'remote_dns_subnet 224\n' \
-                              'tcp_read_time_out 15000\n' \
-                              'tcp_connect_time_out 8000\n' \
-                              '\n' \
-                              '[ProxyList]\n' \
-                              '{proxy}'.format(proxy='\n'.join(self._proxy))
-
-        print(pc4_config_content)
-        xp.about_t('Writting', path_to_conf)
+        # write
         with open(path_to_conf, 'wb') as f:
-            f.write(pc4_config_content.encode('utf-8'))
+            f.write(configs.encode('utf-8'))
         xp.success()
-        return True
+        xp.wr(xp.Fore.LIGHTBLACK_EX + configs)
+        xp.fx()
+
+        return path_to_conf
