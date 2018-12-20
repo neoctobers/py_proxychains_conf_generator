@@ -6,7 +6,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="proxychains-conf-generator",
-    version="2.0.2",
+    version="2.0.3",
     author="@neoctobers",
     author_email="neoctobers@gmail.com",
     description="A proxychains config file generator.",

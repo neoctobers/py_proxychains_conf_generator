@@ -23,7 +23,7 @@ class Generator:
               plain_to_console: bool = False,
               ):
 
-        xp.about_t('Generate', path_to_conf, 'for proxychains')
+        xp.about_t('Generating', path_to_conf, 'for proxychains')
 
         configs = list()
 
