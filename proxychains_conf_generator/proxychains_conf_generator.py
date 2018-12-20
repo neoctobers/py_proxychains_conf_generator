@@ -19,7 +19,9 @@ class Generator:
             self._proxy = proxy
 
     def write(self,
-              path_to_conf: str = '/etc/proxychains.conf'):
+              path_to_conf: str = '/etc/proxychains.conf',
+              plain_to_console: bool = False,
+              ):
 
         xp.about_t('Generate', path_to_conf, 'for proxychains')
 
@@ -41,6 +43,9 @@ class Generator:
         with open(path_to_conf, 'wb') as f:
             f.write(configs.encode('utf-8'))
         xp.success()
-        xp.plain_text(configs)
+
+        # plain to console
+        if plain_to_console:
+            xp.plain_text(configs)
 
         return path_to_conf
